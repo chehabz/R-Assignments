@@ -1,8 +1,10 @@
 ---
 title: "Assignment 3"
 author: "Mohammad Shehab"
-data: "30-March-2020"
-output: html_document
+output:
+  html_document: default
+  pdf_document: default
+data: 30-March-2020
 ---
 
 ### Introduction
