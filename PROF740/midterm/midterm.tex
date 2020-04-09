@@ -1,0 +1,691 @@
+\PassOptionsToPackage{unicode=true}{hyperref} % options for packages loaded elsewhere
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[]{article}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\usepackage{fixltx2e} % provides \textsubscript
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provides euro and other symbols
+\else % if luatex or xelatex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Ligatures=TeX,Scale=MatchLowercase}
+\fi
+% use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+% use microtype if available
+\IfFileExists{microtype.sty}{%
+\usepackage[]{microtype}
+\UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\IfFileExists{parskip.sty}{%
+\usepackage{parskip}
+}{% else
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+}
+\usepackage{hyperref}
+\hypersetup{
+            pdftitle={Midterm},
+            pdfauthor={Mohammad Shehab},
+            pdfborder={0 0 0},
+            breaklinks=true}
+\urlstyle{same}  % don't use monospace font for urls
+\usepackage[margin=1in]{geometry}
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{graphicx,grffile}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{0}
+% Redefines (sub)paragraphs to behave more like sections
+\ifx\paragraph\undefined\else
+\let\oldparagraph\paragraph
+\renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+\let\oldsubparagraph\subparagraph
+\renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+
+% set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+
+
+\title{Midterm}
+\author{Mohammad Shehab}
+\date{4/1/2020}
+
+\begin{document}
+\maketitle
+
+\hypertarget{introduction}{%
+\section{Introduction}\label{introduction}}
+
+On April 15, 1912, the largest passenger liner ever made collided with
+an iceberg during her maiden voyage. When the Titanic sank it killed
+1502 out of 2224 passengers and crew. This sensational tragedy shocked
+the international community and led to better safety regulations for
+ships. One of the reasons that the shipwreck resulted in such loss of
+life was that there were not enough lifeboats for the passengers and
+crew. Although there was some element of luck involved in surviving the
+sinking, some groups of people were more likely to survive than others.
+
+The titanic.csv file contains data for 1310 of the real Titanic
+passengers. Each row represents one person. The columns describe
+different attributes about the person including whether they survived
+(S), their age (A), their passenger-class (C), their sex (G) and the
+fare they paid (X).
+
+We are going to perform a Exploratory Data Analysis to try to understand
+the survivors pattern.How was the classes distributes and does it means
+if you are on higher class you had more chances of survival ?
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\hypertarget{eda-goal}{%
+\section{EDA Goal}\label{eda-goal}}
+
+We are going to perform an exploratory data analysis to our titanic
+dataset, we will ask some questions about our data set to discover the
+variables and values, then we will visualize the distributions perform
+some transformation and then the model to come up with conclusion and
+analysis.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\hypertarget{dependencies}{%
+\section{Dependencies}\label{dependencies}}
+
+In order to execute our program we have to have the following
+dependencies. I will not be loading the titanic dataset from a csv file
+however i have installed a package to do this for me.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#install.packages("tidyverse")}
+\CommentTok{#install.packages("rpart.plot") }
+\CommentTok{#install.packages("caret")}
+\CommentTok{#install.packages("e1071")}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{library}\NormalTok{(tidyverse)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## -- Attaching packages --------------- tidyverse 1.3.0 --
+\end{verbatim}
+
+\begin{verbatim}
+## v ggplot2 3.3.0     v purrr   0.3.3
+## v tibble  2.1.3     v dplyr   0.8.5
+## v tidyr   1.0.2     v stringr 1.4.0
+## v readr   1.3.1     v forcats 0.5.0
+\end{verbatim}
+
+\begin{verbatim}
+## -- Conflicts ------------------ tidyverse_conflicts() --
+## x dplyr::filter() masks stats::filter()
+## x dplyr::lag()    masks stats::lag()
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{library}\NormalTok{(rpart.plot) }
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Loading required package: rpart
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{library}\NormalTok{(caret)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Loading required package: lattice
+\end{verbatim}
+
+\begin{verbatim}
+## 
+## Attaching package: 'caret'
+\end{verbatim}
+
+\begin{verbatim}
+## The following object is masked from 'package:purrr':
+## 
+##     lift
+\end{verbatim}
+
+\#Loading the Titanic data
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#clean the workspace for every run}
+\KeywordTok{rm}\NormalTok{(}\DataTypeTok{list =} \KeywordTok{ls}\NormalTok{())}
+\NormalTok{titanic <-}\StringTok{ }\KeywordTok{read.csv}\NormalTok{(}\StringTok{"titanic.csv"}\NormalTok{, }\DataTypeTok{na.strings=}\StringTok{""}\NormalTok{)}
+\KeywordTok{colnames}\NormalTok{(titanic)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##  [1] "Survived"                           "Passenger.Class"                   
+##  [3] "Name"                               "Sex"                               
+##  [5] "Age"                                "No.of.Siblings.or.Spouses.on.Board"
+##  [7] "No.of.Parents.or.Children.on.Board" "Ticket.Number"                     
+##  [9] "Passenger.Fare"                     "Cabin"                             
+## [11] "Port.of.Embarkation"                "Life.Boat"
+\end{verbatim}
+
+\hypertarget{framing-questions}{%
+\section{Framing Questions}\label{framing-questions}}
+
+\begin{itemize}
+\tightlist
+\item
+  1 - What is the age distrbution on the ship ?
+\item
+  2 - How the age distrubuted between sex and age ?
+\item
+  3 - How did the age and sex affected the survival rate ?
+\item
+  5 - Does being in a specific class affects your survival rate? Can
+  this apply for ages alike ?
+\item
+  4 - How was the fare distributed?
+\end{itemize}
+
+\hypertarget{visualisation-of-distribution}{%
+\section{Visualisation of
+Distribution}\label{visualisation-of-distribution}}
+
+\begin{itemize}
+\tightlist
+\item
+  we will examin the distribution of the passenger's sex.
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# if we want to filter `na` we can simply say}
+\CommentTok{# titanic<-titanic %>%}
+\CommentTok{#  filter(!is.na(Sex))}
+\CommentTok{# however, we are not cleaning the data.}
+
+\KeywordTok{ggplot}\NormalTok{(}\DataTypeTok{data =}\NormalTok{ titanic) }\OperatorTok{+}
+\StringTok{    }\KeywordTok{geom_bar}\NormalTok{(}\DataTypeTok{mapping =} \KeywordTok{aes}\NormalTok{(}\DataTypeTok{x=}\NormalTok{Sex, }\DataTypeTok{fill=}\NormalTok{Sex), }\DataTypeTok{col =} \StringTok{"black"}\NormalTok{, }\DataTypeTok{alpha =} \FloatTok{0.8}\NormalTok{) }\OperatorTok{+}\StringTok{ }
+\StringTok{    }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{x =} \StringTok{"Sex"}\NormalTok{, }\DataTypeTok{y =} \StringTok{"Count"}\NormalTok{, }\DataTypeTok{title =} \StringTok{"Sex Distribution"}\NormalTok{) }\OperatorTok{+}
+\StringTok{    }\KeywordTok{theme_classic}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{midterm_files/figure-latex/unnamed-chunk-4-1.pdf}
+
+Since sex is a categorical variable we use a bar chart. The bar chart
+shows that there is 1 \texttt{NA} sex which can indicate that the gender
+is missing for the individual, the bar chart displays that the number of
+males is greater than females.
+
+We can display the following by using the \texttt{count}. The count
+function generates an error when using \texttt{NA} with factors so we
+remove the \texttt{NA}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{titanic<-titanic }\OperatorTok{%>%}
+\StringTok{ }\KeywordTok{filter}\NormalTok{(}\OperatorTok{!}\KeywordTok{is.na}\NormalTok{(Sex))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{titanic }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{count}\NormalTok{(Sex)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 2 x 2
+##   Sex        n
+##   <fct>  <int>
+## 1 Female   466
+## 2 Male     843
+\end{verbatim}
+
+To examin the distribution of the \texttt{Age} we will use a histogram
+chart.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{ggplot}\NormalTok{(}\DataTypeTok{data =}\NormalTok{ titanic) }\OperatorTok{+}
+\StringTok{      }\KeywordTok{geom_histogram}\NormalTok{(}\DataTypeTok{mapping =} \KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ Age), }\DataTypeTok{binwidth =} \FloatTok{0.5}\NormalTok{) }\OperatorTok{+}\StringTok{ }
+\StringTok{      }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{x =} \StringTok{"Age"}\NormalTok{, }\DataTypeTok{y =} \StringTok{"Count"}\NormalTok{, }\DataTypeTok{title =} \StringTok{"Age Distribution"}\NormalTok{) }\OperatorTok{+}
+\StringTok{        }\KeywordTok{theme_classic}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning: Removed 263 rows containing non-finite values (stat_bin).
+\end{verbatim}
+
+\includegraphics{midterm_files/figure-latex/unnamed-chunk-7-1.pdf}
+
+The \texttt{age} distribution is plotted above in a histrogram which
+shows a \texttt{positive\ skewed} distribution, this can give an
+indication on the median if we plot this on a box and whiskers.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+ \KeywordTok{ggplot}\NormalTok{(}\DataTypeTok{data =}\NormalTok{ titanic, }\DataTypeTok{mapping =} \KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ Age), }\DataTypeTok{horizontal =}\NormalTok{ T, }\DataTypeTok{main=} \StringTok{"Age Distribution of Passengers"}\NormalTok{) }\OperatorTok{+}
+\StringTok{   }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{x =} \StringTok{"Age"}\NormalTok{, }\DataTypeTok{title =} \StringTok{"Age Distribution along"}\NormalTok{) }\OperatorTok{+}
+\StringTok{      }\KeywordTok{geom_boxplot}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning: Removed 263 rows containing non-finite values (stat_boxplot).
+\end{verbatim}
+
+\includegraphics{midterm_files/figure-latex/unnamed-chunk-8-1.pdf}
+
+This confirms the following: The lower quartile of the box is 20 which
+means 25\% where under the age of 19, and 75\% where older than the age
+of almost 25. Although we had some outliers which were above the age of
+60+. The mean will not give an accurate indication as it has been
+affected by the \texttt{outliers} and the \texttt{NA\textquotesingle{}s}
+if we calculate the median the below results confirms that the avarage
+age 28 where the majority \texttt{75\%} of the passangers who were on
+the titanic.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{summary}\NormalTok{(titanic}\OperatorTok{$}\NormalTok{Age)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA's 
+##  0.1667 21.0000 28.0000 29.8811 39.0000 80.0000     263
+\end{verbatim}
+
+the following observation if we calculate the number of people with age
+respectively and display them in a tabular format.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{titanic }\OperatorTok{%>%}
+\StringTok{      }\KeywordTok{count}\NormalTok{(}\KeywordTok{cut_width}\NormalTok{(Age, }\FloatTok{0.5}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning: Factor `cut_width(Age, 0.5)` contains implicit NA, consider using
+## `forcats::fct_explicit_na`
+\end{verbatim}
+
+\begin{verbatim}
+## # A tibble: 94 x 2
+##    `cut_width(Age, 0.5)`     n
+##    <fct>                 <int>
+##  1 [-0.25,0.25]              1
+##  2 (0.25,0.75]               6
+##  3 (0.75,1.25]              15
+##  4 (1.75,2.25]              12
+##  5 (2.75,3.25]               7
+##  6 (3.75,4.25]              10
+##  7 (4.75,5.25]               5
+##  8 (5.75,6.25]               6
+##  9 (6.75,7.25]               4
+## 10 (7.75,8.25]               6
+## # ... with 84 more rows
+\end{verbatim}
+
+It will indicate that the 42 passengers are between the age of
+\texttt{{[}23.8\ and\ 24.2{]}}. if we to look at the lower bound of the
+box we can have something that looks like this
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{young<-}\StringTok{ }\NormalTok{titanic }\OperatorTok{%>%}
+\StringTok{    }\KeywordTok{filter}\NormalTok{(Age}\OperatorTok{<}\FloatTok{26.8}\NormalTok{)}
+
+\CommentTok{## then we can plot data}
+\KeywordTok{ggplot}\NormalTok{(}\DataTypeTok{data =}\NormalTok{ young) }\OperatorTok{+}
+\StringTok{      }\KeywordTok{geom_histogram}\NormalTok{(}\DataTypeTok{mapping =} \KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ Age)) }\OperatorTok{+}\StringTok{ }
+\StringTok{      }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{x =} \StringTok{"Age"}\NormalTok{, }\DataTypeTok{y =} \StringTok{"Count"}\NormalTok{, }\DataTypeTok{title =} \StringTok{"Passengers Under 26.8 years of age"}\NormalTok{) }\OperatorTok{+}
+\StringTok{        }\KeywordTok{theme_classic}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+\end{verbatim}
+
+\includegraphics{midterm_files/figure-latex/unnamed-chunk-11-1.pdf}
+
+we notice how quickly the observation have changed, now it's showing a
+\texttt{negatively\ skewed\ distribution} towards the right.If we use a
+histrogram and correlate with the Age/Sex it might give us a better
+indication.Hence, we can observe that the Males younger on the ship are
+more in numbers with comparison the females.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{ggplot}\NormalTok{(}\DataTypeTok{data =}\NormalTok{ young, }\DataTypeTok{mapping =} \KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ Age, }\DataTypeTok{color =}\NormalTok{ Sex)) }\OperatorTok{+}
+\StringTok{      }\KeywordTok{geom_freqpoly}\NormalTok{(}\DataTypeTok{binwidth =} \DecValTok{1}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{midterm_files/figure-latex/unnamed-chunk-12-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+        \KeywordTok{labs}\NormalTok{(}\DataTypeTok{x =} \StringTok{"Age"}\NormalTok{, }\DataTypeTok{y =} \StringTok{"Count"}\NormalTok{, }\DataTypeTok{title =} \StringTok{"Passengers Under 26.8 years of age"}\NormalTok{) }\OperatorTok{+}
+\StringTok{          }\KeywordTok{theme_classic}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## NULL
+\end{verbatim}
+
+We now observe how the survival rate was disributed overall between
+ages. it almost makes sense as Females had more chances in surviving
+than males based on the age distribution along with older females had
+more chances of survival females who are below the age of 40 had a 75\%
+chance for survival.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{ggplot}\NormalTok{(titanic,}\KeywordTok{aes}\NormalTok{(Survived, Age, }\DataTypeTok{fill =}\NormalTok{ Sex))}\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_boxplot}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning: Removed 263 rows containing non-finite values (stat_boxplot).
+\end{verbatim}
+
+\includegraphics{midterm_files/figure-latex/unnamed-chunk-13-1.pdf}
+
+We now observe the class with age.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{ggplot}\NormalTok{(}\DataTypeTok{data =}\NormalTok{ titanic , }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =} \KeywordTok{as.factor}\NormalTok{(Passenger.Class), }
+                            \DataTypeTok{y =}\NormalTok{ Age, }\DataTypeTok{colour =}\NormalTok{ Survived)) }\OperatorTok{+}
+\KeywordTok{geom_boxplot}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning: Removed 263 rows containing non-finite values (stat_boxplot).
+\end{verbatim}
+
+\includegraphics{midterm_files/figure-latex/unnamed-chunk-14-1.pdf}
+
+We observe that people in the first class had a higher chances of
+survival however only young people had a higher chances people who were
+in the first class and above the age of 38 had 50\% chances of surviving
+on the other hand people of where above 60 of age had less than 25\%
+chances or surviving.
+
+\begin{itemize}
+\tightlist
+\item
+  How was the fare distributed?
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{ggplot}\NormalTok{(}\DataTypeTok{data =}\NormalTok{ titanic) }\OperatorTok{+}\StringTok{ }
+\StringTok{  }\KeywordTok{geom_point}\NormalTok{(}\DataTypeTok{mapping =} \KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ Passenger.Class, }\DataTypeTok{y =}\NormalTok{ Passenger.Fare), }\DataTypeTok{alpha =} \DecValTok{1} \OperatorTok{/}\StringTok{ }\DecValTok{100}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning: Removed 1 rows containing missing values (geom_point).
+\end{verbatim}
+
+\includegraphics{midterm_files/figure-latex/unnamed-chunk-15-1.pdf}
+
+Very normal to have fares high based on the class; However we observe
+that some people paid very high amount for the same class.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{ggplot}\NormalTok{(}\DataTypeTok{data =}\NormalTok{ titanic , }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =} \KeywordTok{as.factor}\NormalTok{(Passenger.Class), }
+                            \DataTypeTok{y =}\NormalTok{ Passenger.Fare, }\DataTypeTok{colour =}\NormalTok{ Sex)) }\OperatorTok{+}
+\KeywordTok{geom_boxplot}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning: Removed 1 rows containing non-finite values (stat_boxplot).
+\end{verbatim}
+
+\includegraphics{midterm_files/figure-latex/unnamed-chunk-16-1.pdf}
+\texttt{WOW} that was not expected, females with same class as men paid
+higher amount for the fare!! some outliers paid 500 for the fare and he
+is with the same class as the others.
+
+\hypertarget{refining-and-generating-more-questions}{%
+\subsection{Refining and Generating More
+Questions}\label{refining-and-generating-more-questions}}
+
+The following exploration leads us to generate more questions.
+
+\begin{itemize}
+\tightlist
+\item
+  Anything is unusual about the age?
+\item
+  What is the survival rate for elderly?
+\item
+  Whas was the survival ratio between the sex in the elderlies ?
+\end{itemize}
+
+we use the \texttt{coord\_cartesian} to zoom in and see what in unsual
+about some points. In the following nothing is unusal about the points
+except for 1 passenger who was 80 years of age.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{ggplot}\NormalTok{(titanic) }\OperatorTok{+}\StringTok{ }
+\StringTok{  }\KeywordTok{geom_histogram}\NormalTok{(}\DataTypeTok{mapping =} \KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ Age), }\DataTypeTok{binwidth =} \FloatTok{0.5}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{coord_cartesian}\NormalTok{(}\DataTypeTok{ylim =} \KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{2}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning: Removed 263 rows containing non-finite values (stat_bin).
+\end{verbatim}
+
+\includegraphics{midterm_files/figure-latex/unnamed-chunk-17-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{unusual <-}\StringTok{ }\NormalTok{titanic }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{filter}\NormalTok{(Age }\OperatorTok{<}\StringTok{ }\DecValTok{1} \OperatorTok{|}\StringTok{ }\NormalTok{Age }\OperatorTok{>}\StringTok{ }\DecValTok{60}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{select}\NormalTok{(Age) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{arrange}\NormalTok{(Age)}
+\NormalTok{unusual}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##        Age
+## 1   0.1667
+## 2   0.3333
+## 3   0.4167
+## 4   0.6667
+## 5   0.7500
+## 6   0.7500
+## 7   0.7500
+## 8   0.8333
+## 9   0.8333
+## 10  0.8333
+## 11  0.9167
+## 12  0.9167
+## 13 60.5000
+## 14 61.0000
+## 15 61.0000
+## 16 61.0000
+## 17 61.0000
+## 18 61.0000
+## 19 62.0000
+## 20 62.0000
+## 21 62.0000
+## 22 62.0000
+## 23 62.0000
+## 24 63.0000
+## 25 63.0000
+## 26 63.0000
+## 27 63.0000
+## 28 64.0000
+## 29 64.0000
+## 30 64.0000
+## 31 64.0000
+## 32 64.0000
+## 33 65.0000
+## 34 65.0000
+## 35 65.0000
+## 36 66.0000
+## 37 67.0000
+## 38 70.0000
+## 39 70.0000
+## 40 70.5000
+## 41 71.0000
+## 42 71.0000
+## 43 74.0000
+## 44 76.0000
+## 45 80.0000
+\end{verbatim}
+
+Now we will try to observe the survival rate between the different ages
+and sex. but before that we will \texttt{mutate} our data and create an
+\texttt{AgeGroup} column which is a calculation of ages.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{age_groups <-}\StringTok{ }\NormalTok{titanic }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{AgeGroup =} 
+           \KeywordTok{ifelse}\NormalTok{(Age }\OperatorTok{<}\StringTok{ }\DecValTok{12}\NormalTok{, }\StringTok{'Child'}\NormalTok{, }
+                  \KeywordTok{ifelse}\NormalTok{ ( Age }\OperatorTok{>}\StringTok{ }\DecValTok{12} \OperatorTok{&}\StringTok{ }\NormalTok{Age }\OperatorTok{<}\StringTok{ }\DecValTok{60}\NormalTok{, }\StringTok{'Adult'}\NormalTok{, }
+                           \KeywordTok{ifelse}\NormalTok{( Age }\OperatorTok{>}\StringTok{ }\DecValTok{59}\NormalTok{, }\StringTok{'Elderly'}\NormalTok{, }\OtherTok{NA}\NormalTok{)))) }\OperatorTok{%>%}
+\StringTok{    }\KeywordTok{select}\NormalTok{(Survived, Age, AgeGroup, Sex) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{arrange}\NormalTok{(Age)}
+
+\CommentTok{## plot it}
+\KeywordTok{ggplot}\NormalTok{(}\DataTypeTok{data =}\NormalTok{ age_groups, }\DataTypeTok{mapping =} \KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ Age, }\DataTypeTok{y =}\NormalTok{ AgeGroup, }\DataTypeTok{color=}\NormalTok{Survived)) }\OperatorTok{+}\StringTok{ }
+\StringTok{  }\KeywordTok{geom_point}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning: Removed 263 rows containing missing values (geom_point).
+\end{verbatim}
+
+\includegraphics{midterm_files/figure-latex/unnamed-chunk-18-1.pdf}
+
+This is very new information for me I would have thought that Elderly
+are to be saved first (Children, women, and elderly) this is clearly not
+the case here. we can plot this on a box and whiskers and see how the
+distribution of elderly and correlate it with the class
+
+we can prove this by running the following which shows 28 elderly did
+not survive.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{survived_elderly <-}\StringTok{ }\NormalTok{age_groups }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{filter}\NormalTok{(Age }\OperatorTok{>}\StringTok{ }\DecValTok{59}\NormalTok{)  }\OperatorTok{%>%}
+\StringTok{    }\KeywordTok{group_by}\NormalTok{(Survived) }\OperatorTok{%>%}
+\StringTok{    }\KeywordTok{count}\NormalTok{(AgeGroup)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{age_groups }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{ggplot}\NormalTok{(}\DataTypeTok{mapping =} \KeywordTok{aes}\NormalTok{(Age)) }\OperatorTok{+}\StringTok{ }
+\StringTok{    }\KeywordTok{geom_freqpoly}\NormalTok{(}\DataTypeTok{mapping =} \KeywordTok{aes}\NormalTok{(}\DataTypeTok{colour =}\NormalTok{ Survived), }\DataTypeTok{binwidth =} \DecValTok{1}\OperatorTok{/}\DecValTok{4}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning: Removed 263 rows containing non-finite values (stat_bin).
+\end{verbatim}
+
+\includegraphics{midterm_files/figure-latex/unnamed-chunk-20-1.pdf}
+
+\hypertarget{conclusion}{%
+\subsection{Conclusion:}\label{conclusion}}
+
+This is clearly just the begining of not even scratching the surface of
+the \texttt{titanic} dataset I had no idea that the elderly would have a
+very chance survival rate and I would have always expected that children
+women and elderly clearly that was not the case on the titanic. Fare
+distribution was again was a WOW factor for me males paid cheaper amount
+for the same class than females!
+
+\end{document}

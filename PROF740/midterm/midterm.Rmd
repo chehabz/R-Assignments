@@ -2,7 +2,9 @@
 title: "Midterm"
 author: "Mohammad Shehab"
 date: "4/1/2020"
-output: html_document
+output:
+  html_document: default
+  pdf_document: default
 ---
 
 # Introduction
@@ -14,10 +16,15 @@ The titanic.csv file contains data for 1310 of the real Titanic passengers. Each
 
 We are going to perform a Exploratory Data Analysis to try to understand the survivors pattern.How was the classes distributes and does it means if you are on higher class you had more chances of survival ?
 
-
 --- 
 
-# Dependencies
+# EDA Goal
+
+We are going to perform an exploratory data analysis to our titanic dataset, we will ask some questions about our data set to discover the variables and values, then we will visualize the distributions perform some transformation and then the model to come up with conclusion and analysis. 
+
+---
+
+# Dependencies 
 
 In order to execute our program we have to have the following dependencies. I will not be loading the titanic dataset from a csv file however i have installed a package to do this for me.
 
@@ -34,360 +41,224 @@ library(rpart.plot)
 library(caret)
 ```
 
-#Load and Describing our data and a quick summary
+#Loading the Titanic data
 
 ```{r}
-#clean
+#clean the workspace for every run
 rm(list = ls())
-train <- read.csv("titanic.csv", na.strings="")
-str(train)
+titanic <- read.csv("titanic.csv", na.strings="")
+colnames(titanic)
 ```
 
-# Data Preparation and Cleaning
+# Framing Questions 
 
-I'm trying to add more attributes to the model in such i dont want to use strings when you have true/false or male female or survived or not it's always better using 1 character or boolean vs using a string.
+- 1 - What is the age distrbution on the ship ? 
+- 2 - How the age distrubuted between sex and age ?
+- 3 - How did the age and sex affected the survival rate ?
+- 5 - Does being in a specific class affects your survival rate? Can this apply for ages alike ?
+- 4 - How was the fare distributed?
 
-I will also try to remove any nullabale values as it makes it much more easier in the data processing.
+# Visualisation of Distribution
 
-```{r}
-# survived
-train$SurvivedFac <- ifelse(train$Survived=="Yes",1,0)
-train$SurvivedNum <- as.numeric(train$SurvivedFac) 
-
-# class
-train$PclassFac <- ifelse(train$Passenger.Class=="First", "1st Class", ifelse(train$Passenger.Class=="Second", "2nd Class", "3rd Class"))
-train$PclassFac <- factor(train$PclassFac)
-train$PclassNum <- ifelse(train$Passenger.Class=="First", 1, ifelse(train$Passenger.Class=="Second", 2, 3))
-
-
-#adding the length of the name as it might mean something
-train$NameLength <- vector("numeric", nrow(train))
-for (i in 1:nrow(train)) {
-    train$NameLength[i] <- nchar(as.character(train$Name)[i])
-}
-
-train$SexFac <- ifelse(train$Sex=="Male", 1,0)
-
-summary(train)
-```
-
-#Data visualization
-
-1 - I'm trying to correlate between the length of the name (which might be the nationality) and the fare amount in pound. it might give an idea about the distribution of the nationalities. Which means if you had a longer name you might afford a pricy ticket? probably and might be irrelevant.
+- we will examin the distribution of the passenger's sex.
 
 ```{r}
-# see whether NameLength is useful
-plot(train$NameLength, train$Passenger.Fare, 
-    pch=19, col=rgb(0,0,1,alpha=0.2),
-    xlab="Name Length (chars)", 
-    ylab="Fare (Pounds)")
-abline(lm(train$Passenger.Fare ~ train$NameLength), col="red")
-```
+# if we want to filter `na` we can simply say
+# titanic<-titanic %>%
+#  filter(!is.na(Sex))
+# however, we are not cleaning the data.
 
-- Let's take a look at the age distribution. And we might create a correlation between males and females.
-
-```{r}
-ggplot(data=train, aes(x=Age)) +
-  geom_histogram(colour="black", fill="seagreen4",binwidth=10) +
-  ggtitle("Age Distribution") +
-  theme(plot.title = element_text(hjust = 0.5)) +
-  theme(panel.grid.minor = element_line(colour = "red", linetype = "dotted"),
-        panel.background = element_rect(colour = "darkblue"))
-```
-
-
- - So here we show how many `females` (survived or not) vs how many `males` (survived or not)
-
-```{r}
-# using the SurvivedNum as this is should be continuas
-ggplot(data=train, aes(x=SurvivedNum, fill=Sex)) +
-  geom_bar(width=0.7) +
-  scale_fill_manual(values=c("hotpink", "deepskyblue"))+
-  theme(panel.grid.minor=element_blank(),panel.grid.major=element_blank())+
-  scale_x_continuous(breaks = c(0,1), labels = c("No", "Yes"))
-```
-
- - Lets categories the passengers.
-
-```{r}
- ggplot(train %>%
-   filter(!is.na(Age))) + 
-    geom_bar(aes(x = Passenger.Class), fill="#FF6666")
-```
-
-```{r}
-ggplot(train %>%
-   filter(!is.na(Age))) + 
-  geom_bar(aes(x = Sex, fill = Sex))
-```
-
-Let’s create a plot to better understand the distribution of ages of passengers on the Titanic. A histogram is a common way to visualize the distribution of a continuous variable. Creating a histogram is a simple modification of our earlier examples where we created bar plots.
-
-```{r}
- ggplot(train) +
-   geom_histogram(aes(x = Age), bins = 35)
-```
-
-The histogram provides a quick visual representation of the frequency of different age groups. It appears that the the most common (modal) value of age is a little over 20 years old. We can explicitly calculate the mean and median age as follows:
-
-```{r}
-mean(train$Age, na.rm = TRUE)
-```
-
-```{r}
-median(train$Age, na.rm = TRUE)
-```
-
-
- - Take a look at our outlier. From this simple boxplot, it doesn’t look like there is a great difference in the age distribution of passengers who lived vs died.
-
-```{r}
-train %>%
-   filter(!is.na(Age)) %>%
-   ggplot() + 
-   geom_boxplot(aes(Survived, Age))
-```
-
-- So Whats the probability for surviving males vs females? taking into consideration the age group.
-
-```{r}
-train %>%
-  filter(!is.na(Age)) %>%
-   ggplot(aes(x = Age, y = Survived, color = Sex)) + 
-   geom_jitter(height = 0.05, alpha = 0.35) + 
-   geom_smooth(method="glm", method.args = list(family="binomial"))  + 
-   facet_wrap(~Sex) + 
-   labs(x = "Age", y = "Probability of survival")
-```
-
- - It seems that a lot of the middle aged passengers died while the younger age passengers of around age 1 or 2 are more likely to survive.
-
-We can probably see it more clearly by looking at the survival comparison between Child and Adults using the AgeGroup feature we created from previous section.
-
-```{r}
-ggplot(train %>%
-  filter(!is.na(Age))) +
-  geom_freqpoly(mapping = aes(x = Age, color = Survived), binwidth = 1) +
-  labs(x = "Age", y = "Number of Passengers", title = "Survival Comparison by Age") +
-  theme_bw()
-```
-
- - Lets take a look at the people who survived vs the people who didn't, do you remember the first point? I was pointing at the nationality as people who were poor coming from irland and different areas where sitting in class 3
-they couldnt pay for the highest fare which included a life bought.
-
-```{r}
-## get the total count of the passengers
-
-classCount <- train %>%
-    group_by(PclassNum) %>%
-    count(PclassNum) %>%
-    select(PclassNum, Passengers = n)
-
-## plot the pointss
-ggplot(classCount, aes(x = PclassNum, y = Passengers)) +
-    geom_bar(stat = "identity", aes(fill = PclassNum), col = "black", alpha = 0.8) +
-    labs(x = "Passenger Class", y = "Number of Passengers", title = "Number of Passengers in each passenger class") +
+ggplot(data = titanic) +
+    geom_bar(mapping = aes(x=Sex, fill=Sex), col = "black", alpha = 0.8) + 
+    labs(x = "Sex", y = "Count", title = "Sex Distribution") +
     theme_classic()
 ```
 
+Since sex is a categorical variable we use a bar chart. The bar chart shows that there is 1 `NA` sex which can indicate that the gender is missing for the individual, the bar chart displays that the number of males is greater than females.
 
---- 
-
-# Final Project Stars Here
-
-Lets take a look at the people in general.
-Lets break this information a little. What does this means ? What if females where the ones who didnt survived the most ?
-```{r}
-#total Passangers
-totalPassangers<- train %>%
-                    count()
-
-print(totalPassangers)
-
-#All Genders
-genders <- train %>%
-  filter(!is.na(Sex)) %>%
-    group_by(Sex) %>%
-    count(Sex) %>%
-    select(Sex, Passengers = n)
-
-print(genders);     
-
-# Ones who survived         
-survived <- train %>%
-  filter(!is.na(Sex)) %>%
-    filter(Survived == "Yes")  %>%
-    group_by(Sex) %>%
-    count(Sex) %>%
-    select(Sex, Passengers = n)
-
-print(survived); 
-
-## failed to survive
-died <- train %>%
-  filter(!is.na(Sex)) %>%
-    filter(Survived == "No")  %>%
-    group_by(Sex) %>%
-    count(Sex) %>%
-    select(Sex, Passengers = n)
-
-print(died);  
-```
-The people who did'nt survived are the ones who where mostly males. So the entire ship was mostly male dominante. Does this means if we had more males the fitatlies would have been higher?
-
-Looks like it as the out of 843 males only 161 survived this  is almost 64% of the entire passangers.
+We can display the following by using the `count`. The count function generates an error when using `NA` with factors so we remove the `NA`
 
 ```{r}
-ggplot(train %>%
-  filter(!is.na(Sex)), aes(x = Survived, fill=Sex)) +
- geom_bar(position = position_dodge()) +
- geom_text(stat='count', 
-           aes(label=stat(count)), 
-           position = position_dodge(width=1), vjust=-0.5)+
- theme_classic()
+titanic<-titanic %>%
+ filter(!is.na(Sex))
 ```
 
-Lets take a look how these passangers were distributed in terms of Class
-
 ```{r}
-ggplot(train %>%
-  filter(!is.na(Sex)), aes(x = Survived, fill=PclassFac)) +
- geom_bar(position = position_dodge()) +
- geom_text(stat='count', 
-           aes(label=stat(count)), 
-           position = position_dodge(width=1), 
-           vjust=-0.5)+
- theme_classic()
+titanic %>%
+  count(Sex)
 ```
 
-Almost 77% of the men who died where in the lower class. It's very clear that the men who did not survived belonged to the lower classes of the ship which means they were sitting below the deck. This validates the story  that people who belonged to the upper class were preparing to leave the ship without telling the lower class.
-
-# Age distribution 
+To examin the distribution of the `Age` we will use a histogram chart.
 
 ```{r}
-#data cleanup once and forall;
-
-train<-train %>%
-  filter(!is.na(Sex))
+ggplot(data = titanic) +
+      geom_histogram(mapping = aes(x = Age), binwidth = 0.5) + 
+      labs(x = "Age", y = "Count", title = "Age Distribution") +
+        theme_classic()
 ```
 
-Lets take a look at the age distribution, most of the passengers where between the age group of 20 and 40. This is clearly a `positive` skew.
+The `age` distribution is plotted above in a histrogram which shows a `positive skewed` distribution, this can give an indication on the median if we plot this on a box and whiskers.
+
 ```{r}
-ggplot(train, aes(x = Age)) +
- geom_density(fill='seagreen4')
+ ggplot(data = titanic, mapping = aes(x = Age), horizontal = T, main= "Age Distribution of Passengers") +
+   labs(x = "Age", title = "Age Distribution along") +
+      geom_boxplot()
+```
+
+This confirms the following: The lower quartile of the box is 20 which means 25% where under the age of 19, and 75% where older than the age of almost 25. Although we had some outliers which were above the age of 60+. The mean will not give an accurate indication as it has been affected by the `outliers` and the `NA's`
+if we calculate the median the below results confirms that the avarage age 28 where the majority `75%` of the passangers who were on the titanic. 
+```{r}
+summary(titanic$Age)
+```
+
+the following observation if we calculate the number of people with age respectively and display them in a tabular format. 
+
+```{r}
+titanic %>%
+      count(cut_width(Age, 0.5))
 ```
 
 
-Lets break it a little more lets try to see who are the people that survived by their age. 
+It will indicate that the 42 passengers are between the age of `[23.8 and 24.2]`. if we to look at the lower bound of the box we can have something that looks like this
 
 ```{r}
-#filtering out  the people who did not have an age
-train<- train %>%
-        filter(!is.na(Age))
+young<- titanic %>%
+    filter(Age<26.8)
 
-train$Discretized.age = cut(train$Age, c(0,10,20,30,40,50,60,70,80,100))
-ggplot(train, aes(x = Discretized.age, fill=Survived)) +
-  geom_bar(position = position_dodge()) +
-  geom_text(stat='count', aes(label=stat(count)), position = position_dodge(width=1), vjust=-0.5)+
-  theme_classic()
-```
-
-## Building The model.
-
-I'm going to start by splitting my data into train data and testing data. Lets start preparing our train data.
-
-My goal here is whenever i have new data i will give it to the model and it will try me if the new criteria will be in the survived or not class.
-
-I'll start by creating a very simple `function` to prepare my data.
-
-```{r}
-#storing the train data in a tmp variable might need it later
-#the fn trainMaker will create training data defaulted to 70% of my overall data
-inTrain <- createDataPartition(y=train$Survived, p=0.70, list=FALSE)
-train_ds <- train[inTrain,]
-test_ds <- train[-inTrain,]
-train_per <- (nrow(train_ds)/nrow(train))*100
-test_per <- (nrow(test_ds)/nrow(train))*100
-cat("Training dataset is : ", train_per, "% \n")
-cat("Testing dataset is : ", test_per, "% \n")
-```
-
-## Building the decision tree
-
-We are making a decision tree, the following is a classification done based on our training data.
-
-```{r}
-fit <- rpart(Survived ~ Sex + Age + PclassNum, data = train_ds, method = 'class')
-rpart.plot(fit)
-```
-
-## Calculating Accuracy
-
-How can we say that the following is correct? we begin by training the model. Here's how we do it. 
-
-`Note` : we use our testing data for this to get the accuracy
-
-```{r}
-#train the model
-model <- train(Survived ~ Sex + Age + PclassNum, method="rpart", data=train_ds)
-#check the predicted accuracy
-pred_train1 <- predict(model, newdata=train_ds)
-print(confusionMatrix(pred_train1, train_ds$Survived))
-table(pred_train1)
-##Accuracy : 78%
-
-## check the accuracy on the testing dataset  
-pred_valid <- predict(model, newdata=test_ds) 
-print(confusionMatrix(pred_valid, test_ds$Survived))
-table(pred_valid)
-##Accuracy : 77%
+## then we can plot data
+ggplot(data = young) +
+      geom_histogram(mapping = aes(x = Age)) + 
+      labs(x = "Age", y = "Count", title = "Passengers Under 26.8 years of age") +
+        theme_classic()
 ```
 
 
-As per the above we have an accuracy of 77% of predecting a new value using the following model created above with a good confidence interval of 95%
+we notice how quickly the observation have changed, now it's showing a `negatively skewed distribution` towards the right.If we use a histrogram and correlate with the Age/Sex it might give us a better indication.Hence, we can observe that the Males younger on the ship are more in numbers with comparison the females.
+
+```{r}
+ggplot(data = young, mapping = aes(x = Age, color = Sex)) +
+      geom_freqpoly(binwidth = 1)
+        labs(x = "Age", y = "Count", title = "Passengers Under 26.8 years of age") +
+          theme_classic()
+```
+
+
+We now observe how the survival rate was disributed overall between ages.
+it almost makes sense as Females had more chances in surviving than males based on the age distribution along with older females had more chances of survival females who are below the age of 40 had a 75% chance for survival.
+
+```{r}
+ggplot(titanic,aes(Survived, Age, fill = Sex))+
+  geom_boxplot()
+```
+
+
+We now observe the class with age.
+
+```{r}
+ggplot(data = titanic , aes(x = as.factor(Passenger.Class), 
+                            y = Age, colour = Survived)) +
+geom_boxplot()
+```
+
+We observe that people in the first class had a higher chances of survival however only young people had a higher chances people who were in the first class and above the age of 38 had 50% chances of surviving on the other hand people of where above 60 of age had less than 25% chances or surviving.
+
+
+- How was the fare distributed?
+
+```{r}
+ggplot(data = titanic) + 
+  geom_point(mapping = aes(x = Passenger.Class, y = Passenger.Fare), alpha = 1 / 100)
+```
+
+Very normal to have fares high based on the class; However we observe that some people paid very high amount for the same class.
+
+```{r}
+ggplot(data = titanic , aes(x = Passenger.Class,y = Passenger.Fare, colour = Sex)) +
+  geom_boxplot()
+```
+`WOW` that was not expected, females with same class as men paid higher amount for the fare!! some outliers paid 500 for the fare and he is with the same class as the others.
+
+## Refining and Generating More Questions
+
+The following exploration leads us to generate more questions.
+
+-  Anything is unusual about the age?
+-  What is the survival rate for elderly?
+-  What was the survival ratio between the sex in the elderlies ?
+
+we use the `coord_cartesian` to zoom in and see what in unsual about some points. In the following nothing is unusal about the points except for 1 passenger who was 80 years of age.
 
 
 ```{r}
-prepareData <-function(data){
-  data$SurvivedFac <- ifelse(data$Survived=="Yes",1,0)
-  data$SurvivedNum <- as.numeric(data$SurvivedFac) 
-  
-  # class
-  data$PclassFac <- ifelse(data$Passenger.Class=="First", "1st Class", ifelse(data$Passenger.Class=="Second", "2nd Class", "3rd Class"))
-  data$PclassFac <- factor(data$PclassFac)
-  data$PclassNum <- ifelse(data$Passenger.Class=="First", 1, ifelse(data$Passenger.Class=="Second", 2, 3))
-  
-  #adding the length of the name as it might mean something
-  data$NameLength <- vector("numeric", nrow(data))
-  for (i in 1:nrow(data)) {
-      data$NameLength[i] <- nchar(as.character(data$Name)[i])
-  }
-  data$SexFac <- ifelse(data$Sex=="Male", 1,0)
-  data$Discretized.age = cut(data$Age, c(0,10,20,30,40,50,60,70,80,100))
-  
-  return (data)
-}
+ggplot(titanic) + 
+  geom_histogram(mapping = aes(x = Age), binwidth = 0.5) +
+  coord_cartesian(ylim = c(0, 2))
+   
+unusual <- titanic %>% 
+  filter(Age < 1 | Age > 60) %>% 
+  select(Age) %>%
+  arrange(Age)
+unusual
 ```
 
-### Testing data one last time
 
-In this section I created some sample with few data. I created 8 entries with my name however i changed my age and the class. The model has predicted that out of these 8 entires only 3 will survive. Interesting...
+
+Now we will try to observe the survival rate between the different ages and sex. but before that we will `mutate`
+our data and create an `AgeGroup` column which is a calculation of ages.
 
 ```{r}
-live <-prepareData(read.csv("./live.csv", na.strings=""));
-predicted <- predict(model, newdata=live)
-table<- table(predicted)
-summary(table)
-print(table)
+age_groups <- titanic %>%
+  mutate(AgeGroup = 
+           ifelse(Age < 12, 'Child', 
+                  ifelse ( Age > 12 & Age < 60, 'Adult', 
+                           ifelse( Age > 59, 'Elderly', NA)))) %>%
+    select(Survived, Age, AgeGroup, Sex) %>%
+  arrange(Age)
+
+## plot it
+ggplot(data = age_groups, mapping = aes(x = Age, y = AgeGroup, color=Survived)) + 
+  geom_point()
 ```
 
-# Clean Up
+This is very new information for me I would have thought that Elderly are to be saved first (Children, women, and elderly) this is clearly not the case here. we can plot this on a box and whiskers and see how the distribution of elderly and correlate it with the class
+
+we can prove this by running the following which shows 28 elderly did not survive.
 
 ```{r}
-#rm(list = ls())
+all_elderly <- age_groups %>%
+  filter(Age > 59)  %>%
+    group_by(Survived) %>%
+    count(AgeGroup)
 ```
 
----
-# Conclusion
+```{r}
+age_groups %>%
+  ggplot(mapping = aes(Age)) + 
+    geom_freqpoly(mapping = aes(colour = Sex), binwidth = 1/4)
+```
 
- 
+Clearly the diagram shows that more aged males were available on the ship than women. But what would be the survival rate between those?
+
+```{r}
+age_groups <- titanic %>%
+  filter(Age > 59) %>%
+  select(Survived, Age, Sex, Passenger.Class) %>%
+  arrange(Age)
+
+ggplot(data = age_groups , aes(x = Passenger.Class, y = Age, colour = Survived)) +
+  geom_boxplot()
+```
+
+The box plot indicates that the old aged in the first class who were equal or above 60 survived. On the other hand almost 75% under the age of 66 did not survive in the first class. In the second and third class however no survival rate was available between the elderlies. So if you were an old aged man on the titanic you had almost 0 chance of survival if you were in the 2nd or 3rd class.
+
+## Conclusion:
+
+This is clearly just the begining of not even scratching the surface of the `titanic` dataset I had no idea that the elderly would have a very chance survival rate and I would have always expected that children women and elderly clearly that was not the case on the titanic. Fare distribution was again was a WOW factor for me males paid cheaper amount for the same class than females!
+
+
+
+
+
+
+
+
